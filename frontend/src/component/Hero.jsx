@@ -61,7 +61,7 @@ export default function Hero({ colorChange, setColorChange }) {
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ delay: 0.7, duration: 0.4 }}
-            className="hover:bg-[#a18a83] border border-current p-2 px-6 text-1xl rounded-full bg-white text-orange-950 transition-colors"
+            className="hover:bg-[#a18a83] border border-current py-2 px-4 text-1xl rounded-full bg-white text-orange-950 transition-colors"
           >
             Get Your Coffee
           </motion.button>

@@ -11,8 +11,10 @@ const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 export default function Cart({ onCartChange }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState('');
+
   const navigate = useNavigate();
-const location = useLocation();
+  const location = useLocation();
 
   // Fetch initial data
   useEffect(() => {
@@ -24,6 +26,16 @@ const location = useLocation();
       })
       .catch(err => console.error("Error loading cart:", err));
   }, []);
+
+
+
+  useEffect(() => {
+    const storedName = localStorage.getItem('username');
+    if (storedName) {
+      setUser(storedName);
+    }
+  }, []);
+
 
   // DELETE: Remove item
   const handleDeleteItem = async (id) => {
@@ -62,93 +74,92 @@ const location = useLocation();
     }
   };
 
-  const calculateTotal = () => 
+  const calculateTotal = () =>
     items.reduce((acc, item) => acc + (Number(item.price) * item.quantity), 0).toFixed(2);
 
   if (loading) return <div className="pt-20 text-center font-oswald text-orange-950 uppercase tracking-widest">Loading Cart...</div>;
   // Function to clear cart from database
-const clearCartOnServer = async () => {
-  const token = localStorage.getItem('token');
-  
-  try {
-    const res = await fetch(`${API_BASE_URL}/api/cart`, { 
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${token}` // Send the VIP pass
+  const clearCartOnServer = async () => {
+    const token = localStorage.getItem('token');
+
+    try {
+      const res = await fetch(`${API_BASE_URL}/api/cart`, {
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}` // Send the VIP pass
+        }
+      });
+
+      if (res.ok) {
+        setItems([]);
+        if (onCartChange) onCartChange();
       }
-    });
-    
-    if (res.ok) {
-      setItems([]); 
-      if (onCartChange) onCartChange(); 
+    } catch (err) {
+      console.error("Failed to clear cart:", err);
     }
-  } catch (err) {
-    console.error("Failed to clear cart:", err);
-  }
-};
-const handleCheckout = () => {
-  // 1. Check if user is logged in
-  const token = localStorage.getItem('token');
+  };
+  const handleCheckout = () => {
+    // 1. Check if user is logged in
+    const token = localStorage.getItem('token');
 
-  if (!token) {
-    // 2. If not logged in, show a toast and redirect
-    toast.error("Please login to complete your order", {
+    if (!token) {
+      // 2. If not logged in, show a toast and redirect
+      toast.error("Please login to complete your order", {
         style: {
-            borderRadius: '10px',
-            background: '#fff',
-            color: '#431407', // orange-950
+          borderRadius: '10px',
+          background: '#fff',
+          color: '#431407', // orange-950
         },
-    });
-    
-    // We pass the current path ('/cart') in the state so Login knows where to return
-    navigate('/login', { state: { from: location } });
-    return;
-  }
+      });
 
-  // 3. If logged in, proceed with the existing checkout logic
-  if (items.length === 0) return;
+      // We pass the current path ('/cart') in the state so Login knows where to return
+      navigate('/login', { state: { from: location } });
+      return;
+    }
 
-  toast.custom(
-    (t) => (
-      <div
-        onClick={() => toast.remove(t.id)}
-        className={`${
-          t.visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
-        } transition-all duration-300 ease-in-out max-w-sm w-full bg-white shadow-2xl rounded-xl pointer-events-auto flex cursor-pointer border border-orange-200 relative z-[9999]`}
-      >
-        <div className="flex-1 p-4">
-          <div className="flex items-center gap-3">
-            <div className="bg-green-100 p-2 rounded-full">
-              <span className="text-green-600 text-lg">✓</span>
-            </div>
-            <div className="flex flex-col">
-              <p className="text-sm font-black text-orange-950 uppercase tracking-tighter">
-                Payment Successful
-              </p>
-              <p className="text-[11px] text-orange-900/70 font-medium">
-                Wait for your order to be ready
-              </p>
+    // 3. If logged in, proceed with the existing checkout logic
+    if (items.length === 0) return;
+
+    toast.custom(
+      (t) => (
+        <div
+          onClick={() => toast.remove(t.id)}
+          className={`${t.visible ? 'opacity-100 translate-y-0' : 'opacity-0 -translate-y-4'
+            } transition-all duration-300 ease-in-out max-w-sm w-full bg-white shadow-2xl rounded-xl pointer-events-auto flex cursor-pointer border border-orange-200 relative z-[9999]`}
+        >
+          <div className="flex-1 p-4">
+            <div className="flex items-center gap-3">
+              <div className="bg-green-100 p-2 rounded-full">
+                <span className="text-green-600 text-lg">✓</span>
+              </div>
+              <div className="flex flex-col">
+                <p className="text-sm font-black text-orange-950 uppercase tracking-tighter">
+                  Payment Successful
+                </p>
+                <p className="text-[11px] text-orange-900/70 font-medium">
+                  Wait for your order to be ready
+                </p>
+              </div>
             </div>
           </div>
+          <div className="flex items-center pr-4 border-l border-orange-50 ml-2">
+            <span className="text-orange-300 text-xs font-bold">✕</span>
+          </div>
         </div>
-        <div className="flex items-center pr-4 border-l border-orange-50 ml-2">
-          <span className="text-orange-300 text-xs font-bold">✕</span>
-        </div>
-      </div>
-    ),
-    { position: 'top-center', duration: 4000 }
-  );
+      ),
+      { position: 'top-center', duration: 4000 }
+    );
 
-  clearCartOnServer(); 
-};
+    clearCartOnServer();
+  };
 
   return (
     <div className="pt-10 pb-20 min-h-screen bg-[#f2eccc] px-4 md:px-10 lg:px-20">
       <div className="max-w-6xl mx-auto">
-        
+
         {/* Header */}
         <div className="flex justify-between items-center mb-10">
-          <h1 className="text-3xl md:text-5xl font-bold uppercase font-oswald text-orange-950">Your Order</h1>
+          <h1 className="text-3xl md:text-5xl font-bold uppercase font-oswald text-orange-950">{user ? `${user}'s Order` : 'Your Order'}</h1>
           <Link to="/menu" className="hidden md:block text-orange-900 font-semibold hover:underline">
             ← Continue Shopping
           </Link>
@@ -183,7 +194,7 @@ const handleCheckout = () => {
               }
 
               // 3. Combine with Base URL and ensure slash exists
-              const fullImageSrc = path 
+              const fullImageSrc = path
                 ? `${API_BASE_URL}${path.startsWith('/') ? '' : '/'}${path}`
                 : '';
               // --- IMAGE LOGIC END ---
@@ -202,7 +213,7 @@ const handleCheckout = () => {
                     <div className="flex flex-col">
                       <span className='uppercase font-bold text-lg lg:text-2xl font-oswald text-orange-950'>{item.title}</span>
                       <span className="text-orange-900/60 font-medium">${Number(item.price).toFixed(2)} each</span>
-                      <button 
+                      <button
                         onClick={() => handleDeleteItem(currentId)}
                         className="lg:hidden text-left text-red-600 text-xs font-bold uppercase mt-2 active:scale-95"
                       >
@@ -227,7 +238,7 @@ const handleCheckout = () => {
                       <span className='font-oswald text-xl lg:text-2xl font-bold text-orange-950'>
                         ${(Number(item.price) * item.quantity).toFixed(2)}
                       </span>
-                      <button 
+                      <button
                         onClick={() => handleDeleteItem(currentId)}
                         className="hidden lg:block text-red-600 hover:text-red-800 text-xs font-bold uppercase tracking-tighter mt-1 transition-colors"
                       >
@@ -256,7 +267,7 @@ const handleCheckout = () => {
                 </div>
                 <button className="w-full bg-orange-950 text-white py-4 rounded-full
                  font-bold uppercase tracking-widest hover:bg-orange-900 transition-colors
-                  shadow-lg active:scale-95" onClick={() =>handleCheckout()}>
+                  shadow-lg active:scale-95" onClick={() => handleCheckout()}>
                   Checkout Now
                 </button>
               </div>

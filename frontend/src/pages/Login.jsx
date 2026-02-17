@@ -4,7 +4,7 @@ import toast from 'react-hot-toast';
 
 export default function Login() {
   const [email, setEmail] = useState('');
-  const [password, setPassword] = useState(''); // Added password state
+  const [password, setPassword] = useState(''); 
   const navigate = useNavigate();
   const location = useLocation();
 
@@ -15,7 +15,7 @@ export default function Login() {
     e.preventDefault();
     
     try {
-      const res = await fetch(`${API_BASE_URL}/api/login`, {
+      const res = await fetch(`${API_BASE_URL}/api/auth/login`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }), // Send both email and password
@@ -52,7 +52,7 @@ export default function Login() {
     </div>
   ));
         localStorage.setItem('token', data.token);
-        localStorage.setItem('username', data.username); // Useful for Navbar
+        localStorage.setItem('username', data.username); 
         toast.success(`Welcome back, ${data.username}!`);
         
         // Redirect back to where they came from (e.g., the Cart)

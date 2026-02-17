@@ -27,10 +27,10 @@ router.post('/login', async (req, res) => {
   const { email, password } = req.body;
   try {
     const user = await db.query('SELECT * FROM users WHERE email = $1', [email]);
-    if (user.rows.length === 0) return res.status(400).json({ error: "Check your email and password and try again" });
+    if (user.rows.length === 0) return res.status(400).json({ error: "Check your email and try again" });
 
     const validPassword = await bcrypt.compare(password, user.rows[0].password_hash);
-    if (!validPassword) return res.status(400).json({ error: "Check your email and password and try again" });
+    if (!validPassword) return res.status(400).json({ error: "Check your password and try again" });
 
     const token = jwt.sign(
       { userId: user.rows[0].id, email: user.rows[0].email },

@@ -1,11 +1,19 @@
-import { useEffect } from "react";
-import { Link } from "react-router-dom"; 
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 
 
 export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
+const [user, setUser] = useState("");
 
+  useEffect(() => {
+    // Look for the item using the exact same key: 'username'
+    const storedName = localStorage.getItem('username');
+    if (storedName) {
+      setUser(storedName);
+    }
+  }, []);
   useEffect(() => {
     if (sidebarOpen) {
       document.body.style.overflow = "hidden";
@@ -42,7 +50,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
           </button>
 
           <nav className="flex flex-col gap-6 mt-4 ml-10">
-               <Link
+            <Link
               to="/"
               className="font-normal text-2xl m-2"
               onClick={() => setSidebarOpen(false)}
@@ -57,7 +65,7 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
               Menu
             </Link>
 
-          
+
 
             <Link
               to="/merch"
@@ -80,13 +88,13 @@ export default function Sidebar({ sidebarOpen, setSidebarOpen }) {
         <div className="w-[80%] flex flex-col gap-8">
           <hr className="w-full mx-10 border-gray-300" />
           <div className="pl-10 pb-8 w-fit flex justify-start">
-              <Link
-                to="/login"
-                className="flex items-center gap-2 bg-white border border-black text-black px-4 py-2 rounded-full"
-              >
-                <AccountCircle />
-                <span>Sign In</span>
-              </Link>
+            <Link
+              to="/login"
+              className="flex items-center cursor-pointer gap-2 bg-white border border-black text-black px-4 py-2 rounded-full"
+            >
+              <AccountCircle />
+              <span>{user ? `Welcome, ${user}` : "Sign In"}</span>
+            </Link>
           </div>
         </div>
       </div>

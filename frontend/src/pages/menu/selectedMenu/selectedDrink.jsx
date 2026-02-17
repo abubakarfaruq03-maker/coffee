@@ -106,7 +106,7 @@ export default function SelectedDrink({ onAddSuccess }) {
   return (
     <div className="overflow-x-hidden">
       <nav className="flex px-8 py-4 text-orange-900/60 text-sm uppercase tracking-widest">
-        <Link to="/" className="hover:text-orange-950 transition-colors">Home</Link>
+        <Link to="/menu" className="hover:text-orange-950 transition-colors">Menu</Link>
         <span className="mx-2">/</span>
         <span className="text-orange-950 font-semibold underline decoration-orange-950">{item.title}</span>
       </nav>

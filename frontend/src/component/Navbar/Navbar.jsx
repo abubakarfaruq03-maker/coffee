@@ -3,6 +3,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountCircle from "@mui/icons-material/AccountCircle";
 import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
 
 export default function Navbar({
   sidebarOpen,
@@ -11,7 +12,16 @@ export default function Navbar({
   cartCount
   
 }) {
-  // We removed the useEffect and changeNavbarColor function entirely
+  const [user, setUser] = useState(""); 
+
+useEffect(() => {
+    // Look for the item using the exact same key: 'username'
+    const storedName = localStorage.getItem('username');
+    if (storedName) {
+      setUser(storedName);
+    }
+  }, []);
+
 
   return (
     <div>
@@ -78,7 +88,11 @@ export default function Navbar({
             to="/login"
             className="hidden md:block transition-transform duration-200 hover:scale-125 active:scale-95"
           >
+            <div className="flex justify-center items-center flex-col">
             <AccountCircle fontSize="medium" className="text-orange-950" />
+            <p className="text-xs text-orange-950">{user}</p>
+
+            </div>
           </Link>
         </div>
       </nav>
