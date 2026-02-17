@@ -1,0 +1,94 @@
+import { useState, useEffect } from "react";
+import { Routes, Route } from "react-router-dom";
+import { MenuProvider } from "./contexts/MenuContext";
+import { Toaster } from "react-hot-toast";
+import Navbar from "./component/Navbar/Navbar";
+import Sidebar from "./component/Navbar/Sidebar";
+import Searchbar from "./component/Navbar/Searchbar";
+import Footer from "./component/footer/Footer";
+import SelectedDrink from "./pages/menu/selectedMenu/selectedDrink";
+import Cart from "./pages/Cart";
+import Home from "./pages/Home";
+import Menu from "./pages/menu/Menu";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import ScrollToTop from "./component/ScrolltoTop";
+import "./index.css";
+
+function App() {
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
+  const [colorChange, setColorChange] = useState(false);
+  
+  // 🛒 Cart State
+  const [cartCount, setCartCount] = useState(0);
+
+  // Function to fetch the current cart total from your API
+  const updateCartCount = async () => {
+    try {
+      const res = await fetch('http://172.20.10.5:3000/api/cart');
+      if (!res.ok) {
+       console.error("Server responded with error:", res.status);
+       return;
+    }
+      const data = await res.json();
+      const totalItems = data.reduce((sum, item) => sum + item.quantity, 0);
+    
+setCartCount(totalItems);    } catch (err) {
+      console.error("Error fetching cart:", err);
+    }
+  };
+
+  // Initial fetch when the app loads
+  useEffect(() => {
+    updateCartCount();
+  }, []);
+
+  return (
+    <MenuProvider>
+      <div className="bg-white min-h-screen">
+        <Toaster
+          position="top-center"
+          containerStyle={{ zIndex: 99999 }}
+        />
+        <ScrollToTop />
+        {/* Pass cartCount to Navbar */}
+        <Navbar
+          sidebarOpen={sidebarOpen}
+          setSidebarOpen={setSidebarOpen}
+          setSearchOpen={setSearchOpen}
+          colorChange={colorChange}
+          setColorChange={setColorChange}
+          cartCount={cartCount} 
+        />
+
+        <Searchbar searchOpen={searchOpen} setSearchOpen={setSearchOpen} />
+        <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
+
+        <Routes>
+          <Route
+            path="/"
+            element={<Home colorChange={colorChange} setColorChange={setColorChange} />}
+          />
+          <Route path="/menu" element={<Menu />} />
+
+          
+          {/* Pass updateCartCount to the Drink page */}
+          <Route 
+            path="/menu/:id/:slug" 
+            element={<SelectedDrink onAddSuccess={updateCartCount}  />} 
+          />
+          <Route path="/menu/featured/:drinkName" element={<SelectedDrink onAddSuccess={updateCartCount} />} />
+          <Route path="/cart" element={<Cart onCartChange={updateCartCount} />}
+           />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+        </Routes>
+
+        <Footer />
+      </div>
+    </MenuProvider>
+  );
+}
+
+export default App;

@@ -1,0 +1,26 @@
+@import url("https://fonts.googleapis.com/css2?family=Oswald:wght@200..700&family=Poppins:wght@300;400;600&display=swap");
+@import "tailwindcss";
+@theme {
+  --font-oswald: "Oswald", sans-serif; 
+}
+.monthly-swiper .swiper-button-next,
+.monthly-swiper .swiper-button-prev {
+  color: #431407 !important; 
+  
+}
+.monthly-swiper .swiper-button-next,
+.monthly-swiper .swiper-button-prev {
+  font-size: 8px !important; 
+  
+}
+@layer base {
+  body {
+    /* Prevents that "bounce" effect from showing white */
+    /* and sets the color of the 'gap' area */
+    @apply bg-[#ede8d0]; 
+    overscroll-behavior-y: contain; 
+  }
+}
+
+
+
