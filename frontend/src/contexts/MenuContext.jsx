@@ -8,12 +8,14 @@ export const MenuProvider = ({ children }) => {
   const [menu, setMenu] = useState([]);
   const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
 
   
 
   const fetchMenu = async () => {
     try {
-      const res = await fetch("http://172.20.10.5:3000/api/menu");
+      const res = await fetch(`${API_BASE_URL}/api/menu`);
       const data = await res.json();
       setMenu(data);
     } catch (err) {

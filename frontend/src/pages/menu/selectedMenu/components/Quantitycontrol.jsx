@@ -3,14 +3,13 @@ import { useState, useEffect } from "react";
 export default function QuantityControl({ initialQty = 1, onQtyChange }) {
   const [qty, setQty] = useState(initialQty);
 
-  // Synchronize internal state if initialQty changes externally
   useEffect(() => {
     setQty(initialQty);
   }, [initialQty]);
 
   const updateQty = (newQty) => {
     setQty(newQty);
-    if (onQtyChange) onQtyChange(newQty); // Notify the parent
+    if (onQtyChange) onQtyChange(newQty); 
   };
 
   return (

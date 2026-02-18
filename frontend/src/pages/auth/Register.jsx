@@ -53,7 +53,6 @@ export default function Register() {
         }
       }
     } catch (err) {
-      // Handles the net::ERR_CONNECTION_REFUSED
       toast.error("Server is offline. Check your internet or backend terminal.");
     }
   };

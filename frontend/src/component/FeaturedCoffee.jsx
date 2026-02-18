@@ -4,9 +4,12 @@ import { useNavigate } from "react-router-dom";
 export default function FeaturedCoffee() {
   const [featuredItems, setFeaturedItems] = useState([]);
   const navigate = useNavigate();
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
+
+  
 
   useEffect(() => {
-    fetch('http://172.20.10.5:3000/api/menu/featured')
+    fetch(`${API_BASE_URL}/api/menu/featured`)
       .then(res => {
         if (!res.ok) throw new Error("Failed to fetch");
         return res.json();

@@ -5,6 +5,7 @@ export default function SearchModal({ isOpen, onClose }) {
   // 1. Initialize states (They were missing in your snippet)
   const [query, setQuery] = useState('');
   const [results, setResults] = useState([]);
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   // 2. Fetch results as the user types (Debouncing)
   useEffect(() => {
@@ -15,7 +16,7 @@ export default function SearchModal({ isOpen, onClose }) {
       if (query.trim().length > 1) {
         try {
           // Use your API endpoint
-          const res = await axios.get(`http://localhost:3000/api/menu/search?title=${query}`);
+          const res = await axios.get(`${API_BASE_URL}/api/menu/search?title=${query}`);
           setResults(res.data);
         } catch (err) {
           console.error("Search error:", err);

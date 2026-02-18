@@ -4,7 +4,6 @@ import QuantityControl from '../menu/selectedMenu/components/Quantitycontrol';
 import toast from 'react-hot-toast';
 import { useNavigate, useLocation } from 'react-router-dom';
 
-// 1. Use environment variable for the API base
 const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
 
@@ -16,7 +15,6 @@ export default function Cart({ onCartChange }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Fetch initial data
   useEffect(() => {
     fetch(`${API_BASE_URL}/api/cart`)
       .then(res => res.json())
@@ -37,7 +35,6 @@ export default function Cart({ onCartChange }) {
   }, []);
 
 
-  // DELETE: Remove item
   const handleDeleteItem = async (id) => {
     setItems(prev => prev.filter(item => (item.product_id || item.id) !== id));
 
@@ -52,7 +49,6 @@ export default function Cart({ onCartChange }) {
     }
   };
 
-  // PATCH: Update quantity
   const handleUpdateQuantity = async (id, newQty) => {
     setItems(prev =>
       prev.map(item => {
@@ -78,7 +74,6 @@ export default function Cart({ onCartChange }) {
     items.reduce((acc, item) => acc + (Number(item.price) * item.quantity), 0).toFixed(2);
 
   if (loading) return <div className="pt-20 text-center font-oswald text-orange-950 uppercase tracking-widest">Loading Cart...</div>;
-  // Function to clear cart from database
   const clearCartOnServer = async () => {
     const token = localStorage.getItem('token');
 
@@ -99,11 +94,9 @@ export default function Cart({ onCartChange }) {
     }
   };
   const handleCheckout = () => {
-    // 1. Check if user is logged in
     const token = localStorage.getItem('token');
 
     if (!token) {
-      // 2. If not logged in, show a toast and redirect
       toast.error("Please login to complete your order", {
         style: {
           borderRadius: '10px',
@@ -112,12 +105,10 @@ export default function Cart({ onCartChange }) {
         },
       });
 
-      // We pass the current path ('/cart') in the state so Login knows where to return
       navigate('/login', { state: { from: location } });
       return;
     }
 
-    // 3. If logged in, proceed with the existing checkout logic
     if (items.length === 0) return;
 
     toast.custom(
@@ -157,7 +148,6 @@ export default function Cart({ onCartChange }) {
     <div className="pt-10 pb-20 min-h-screen bg-[#f2eccc] px-4 md:px-10 lg:px-20">
       <div className="max-w-6xl mx-auto">
 
-        {/* Header */}
         <div className="flex justify-between items-center mb-10">
           <h1 className="text-3xl md:text-5xl font-bold uppercase font-oswald text-orange-950">{user ? `${user}'s Order` : 'Your Order'}</h1>
           <Link to="/menu" className="hidden md:block text-orange-900 font-semibold hover:underline">
@@ -174,7 +164,6 @@ export default function Cart({ onCartChange }) {
           </div>
         ) : (
           <div className="space-y-6">
-            {/* Table Header (PC only) */}
             <div className="hidden lg:grid grid-cols-4 pb-4 border-b border-orange-950/20 font-oswald uppercase text-gray-500 text-sm">
               <span className="col-span-2">Product</span>
               <span className="text-center">Quantity</span>
@@ -184,20 +173,16 @@ export default function Cart({ onCartChange }) {
             {items.map(item => {
               const currentId = item.product_id || item.id;
 
-              // --- IMAGE LOGIC START ---
-              // 1. Check both possible DB keys (image_url or image)
+              
               let path = item.image_url || item.image;
 
-              // 2. Force .png extension if path exists
               if (path) {
                 path = path.replace(/\.[^/.]+$/, "") + ".png";
               }
 
-              // 3. Combine with Base URL and ensure slash exists
               const fullImageSrc = path
                 ? `${API_BASE_URL}${path.startsWith('/') ? '' : '/'}${path}`
                 : '';
-              // --- IMAGE LOGIC END ---
 
               return (
                 <div key={currentId} className='bg-white/30 backdrop-blur-sm rounded-xl p-4 lg:p-0 lg:bg-transparent lg:rounded-none border-b border-black/10 flex flex-col lg:grid lg:grid-cols-4 lg:items-center gap-4'>

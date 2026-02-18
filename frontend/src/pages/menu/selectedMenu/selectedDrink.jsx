@@ -18,7 +18,7 @@ export default function SelectedDrink({ onAddSuccess }) {
 
   const milkOptions = ["Whole Milk", "Oat Milk", "Almond Milk", "Skim Milk"];
 
-  // 1. Fetching Logic (Now using .env variable)
+
   useEffect(() => {
     if (drinkName) {
       fetch(`${API_BASE_URL}/api/menu/featured`)
@@ -42,7 +42,7 @@ export default function SelectedDrink({ onAddSuccess }) {
     }
   }, [id, drinkName]);
 
-  // 2. Add to Cart Logic (Now using .env variable)
+  // 2. Add to Cart Logic 
   const addToCart = async () => {
     if (!item) return;
     const loadingToast = toast.loading(`Adding ${item.title}...`);
@@ -115,7 +115,6 @@ export default function SelectedDrink({ onAddSuccess }) {
         <div className="flex flex-col gap-6 lg:gap-0 lg:flex-row justify-evenly items-center w-screen h-fit p-8">
           <div className="flex flex-col justify-center items-center gap-5">
             <div className="flex justify-center items-center rounded-[50%]">
-              {/* Image URL fix: Combines Base URL with the relative image path */}
               <img 
                 src={`${API_BASE_URL}${item.image || item.image}`} 
                 alt={item.title} 

@@ -22,13 +22,13 @@ function App() {
   const [searchOpen, setSearchOpen] = useState(false);
   const [colorChange, setColorChange] = useState(false);
   
-  // 🛒 Cart State
   const [cartCount, setCartCount] = useState(0);
+  const API_BASE_URL = import.meta.env.VITE_API_BASE_URL;
 
   // Function to fetch the current cart total from your API
   const updateCartCount = async () => {
     try {
-      const res = await fetch('http://172.20.10.5:3000/api/cart');
+      const res = await fetch(`${API_BASE_URL}/api/cart`);
       if (!res.ok) {
        console.error("Server responded with error:", res.status);
        return;
@@ -41,7 +41,6 @@ setCartCount(totalItems);    } catch (err) {
     }
   };
 
-  // Initial fetch when the app loads
   useEffect(() => {
     updateCartCount();
   }, []);
@@ -54,7 +53,6 @@ setCartCount(totalItems);    } catch (err) {
           containerStyle={{ zIndex: 99999 }}
         />
         <ScrollToTop />
-        {/* Pass cartCount to Navbar */}
         <Navbar
           sidebarOpen={sidebarOpen}
           setSidebarOpen={setSidebarOpen}
@@ -67,6 +65,7 @@ setCartCount(totalItems);    } catch (err) {
         <Searchbar searchOpen={searchOpen} setSearchOpen={setSearchOpen} />
         <Sidebar sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} />
 
+{/* ROUTES */}
         <Routes>
           <Route
             path="/"
@@ -75,7 +74,6 @@ setCartCount(totalItems);    } catch (err) {
           <Route path="/menu" element={<Menu />} />
 
           
-          {/* Pass updateCartCount to the Drink page */}
           <Route 
             path="/menu/:id/:slug" 
             element={<SelectedDrink onAddSuccess={updateCartCount}  />} 
