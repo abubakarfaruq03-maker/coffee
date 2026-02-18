@@ -2,17 +2,18 @@ import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
 import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import AccountCircle from "@mui/icons-material/AccountCircle";
+import SearchModal from "../SearchModal";
 import { Link } from "react-router-dom";
 import { useEffect, useState } from "react";
 
 export default function Navbar({
   sidebarOpen,
   setSidebarOpen,
-  setSearchOpen,
   cartCount
   
 }) {
   const [user, setUser] = useState(""); 
+  const [isSearchOpen, setSearchOpen] = useState(false);
 
 useEffect(() => {
     // Look for the item using the exact same key: 'username'
@@ -63,7 +64,7 @@ useEffect(() => {
         </div>
 
         {/* --- RIGHT SECTION --- */}
-        <div className="flex justify-end items-center gap-4 w-1/3">
+        <div className="flex justify-end items-start gap-4 w-1/3">
           {/* Search Icon */}
           <button
             onClick={() => setSearchOpen(true)}
@@ -71,6 +72,10 @@ useEffect(() => {
           >
             <SearchIcon fontSize="medium" className="text-orange-950" />
           </button>
+          <SearchModal 
+        isOpen={isSearchOpen} 
+        onClose={() => setSearchOpen(false)} 
+      />
 
           {/* Cart Icon */}
         <Link to="/cart" className="relative">

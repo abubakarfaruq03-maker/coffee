@@ -7,11 +7,13 @@ import Sidebar from "./component/Navbar/Sidebar";
 import Searchbar from "./component/Navbar/Searchbar";
 import Footer from "./component/footer/Footer";
 import SelectedDrink from "./pages/menu/selectedMenu/selectedDrink";
-import Cart from "./pages/Cart";
-import Home from "./pages/Home";
+import Cart from "./pages/cart/Cart";
+import Home from "./pages/home/Home";
 import Menu from "./pages/menu/Menu";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
+import Login from "./pages/auth/Login";
+import Register from "./pages/auth/Register";
+import Merch from "./pages/merch/Merch";
+import Gallery from "./pages/gallery/Gallery";
 import ScrollToTop from "./component/ScrolltoTop";
 import "./index.css";
 
@@ -83,6 +85,8 @@ setCartCount(totalItems);    } catch (err) {
            />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/merch" element={<Merch />} />
+          <Route path="/gallery" element={<Gallery />} />
         </Routes>
 
         <Footer />

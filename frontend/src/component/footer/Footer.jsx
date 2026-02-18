@@ -2,6 +2,7 @@ import { FaLocationDot } from "react-icons/fa6";
 import { FaPhone } from "react-icons/fa6";
 import Button from '@mui/material/Button';
 import SocialRef from "./socialRef";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
     return (
@@ -16,7 +17,7 @@ export default function Footer() {
                     <div className="font-oswald flex flex-col gap-6 pb-12 ml-5">
                         <h1 className="font-bold text-3xl lg:hidden">COFFEE HUT</h1>
                         <p className="text-xl lg:text-2xl lg:font-bold  font-normal pb-0.5 ">SOUTH BEAN</p>
-                        
+
                         <p className="text-xl font-light flex gap-1">  <FaLocationDot /> 123 Coffee bean</p>
                         <p className="text-xl lg:text-xl   font-light pb-0.5">Wonderland CA0000 </p>
                         <a href="https://wa.me/09053559658"
@@ -29,8 +30,8 @@ export default function Footer() {
                     <div className="flex flex-col lg:flex-row font-oswald gap-12 ml-5 py-12">
                         <div className="flex flex-col gap-8 text-xl" >
                             <p className="hover:text-gray-400">About Us</p>
-                            <p className="hover:text-gray-400">Menu</p>
-                            <p className="hover:text-gray-400">Gallery</p>
+                            <Link to="/menu" className="hover:text-gray-400">Menu</Link>
+                            <Link to="/gallery" className="hover:text-gray-400">Gallery</Link>
                             <p className="hover:text-gray-400">For Business Partners</p>
 
                         </div>
@@ -64,20 +65,20 @@ export default function Footer() {
 
                     </div>
                 </div>
-                 <div className=" justify-center items-center hidden lg:flex lg:flex-col">
-                     <div className="hidden lg:block" >
-                            <SocialRef />
-                        </div>
-                                <p className="mt-8 text-sm text-gray-500">
-                                    © {new Date().getFullYear()} Coffee Hut. All rights reserved.
-                                </p>
-                            </div>
+                <div className=" justify-center items-center hidden lg:flex lg:flex-col">
+                    <div className="hidden lg:block" >
+                        <SocialRef />
+                    </div>
+                    <p className="mt-8 text-sm text-gray-500">
+                        © {new Date().getFullYear()} Coffee Hut. All rights reserved.
+                    </p>
+                </div>
 
             </div>
 
 
 
-            
+
         </>
 
     )

@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import QuantityControl from './menu/selectedMenu/components/Quantitycontrol';
+import QuantityControl from '../menu/selectedMenu/components/Quantitycontrol';
 import toast from 'react-hot-toast';
 import { useNavigate, useLocation } from 'react-router-dom';
 
